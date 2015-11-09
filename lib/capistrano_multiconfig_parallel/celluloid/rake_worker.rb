@@ -48,9 +48,8 @@ module CapistranoMulticonfigParallel
     end
 
     def initialize_subscription
-      @client = CelluloidPubsub::Client.connect(actor: Actor.current, enable_debug: debug_enabled?) do |ws|
-        ws.subscribe(@subscription_channel)
-      end if !defined?(@client) || @client.nil?
+      return if defined?(@client) && @client.present?
+      @client = CelluloidPubsub::Client.connect(actor: Actor.current, enable_debug: debug_enabled?, channel: @subscription_channel)
     end
 
     def debug_enabled?
